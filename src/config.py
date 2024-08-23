@@ -5,6 +5,7 @@ import os # for os.environ is used to access the environment variables
 
 load_dotenv()
 
-database_url = os.getenv("DATABASE_URL")
+class Config:
+    database_url = os.getenv("DATABASE_URL")
 
 # use the database_url variable to connect to the database not the DATABASE_URL variable with the value
