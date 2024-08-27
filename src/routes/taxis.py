@@ -8,7 +8,9 @@ from src.models.taxis import Taxis
 
 bp_taxis = Blueprint("taxis", __name__) # create a blueprint for the taxis
 
-
+@bp_taxis.route('/taxis', defaults = {'plate': None, 'page':None, 'limit': None}, methods=['GET'])
+@bp_taxis.route('/taxis/<string:plate>', defaults = {'page':None,'limit': None}, methods=['GET'])
+@bp_taxis.route('/taxis/<string:plate>/<int:page>', defaults = {'limit': None}, methods=['GET'])
 @bp_taxis.route('/taxis/<string:plate>/<int:page>/<int:limit>', methods=['GET']) # create a route for the taxis
 def get_taxis(plate, page, limit):
     
@@ -17,19 +19,20 @@ def get_taxis(plate, page, limit):
     if not session:
         return jsonify({"error": "Error connecting to the database"})
     
-    try:
-        result = session.query(Taxis).all()
-        print(result)
-        table_taxis = []
+    if plate == None and page == None and limit == None:
+        try:
+            result = session.query(Taxis).all()
+            print(result)
+            table_taxis = []
             
-        for row in result:
-            table_taxis.append({"id": row.id, "plate": row.plate})
+            for row in result:
+                table_taxis.append({"id": row.id, "plate": row.plate})
 
-        return jsonify({"taxis": table_taxis})
+            return jsonify({"taxis": table_taxis})
         
-    except Exception as e:
-        return jsonify({"error": str(e)})
+        except Exception as e:
+            return jsonify({"error": str(e)})
     
-    finally:
-        session.close()
-        print("Session closed")
+        finally:
+            session.close()
+            print("Session closed")
