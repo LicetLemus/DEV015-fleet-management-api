@@ -9,8 +9,8 @@ from src.models.taxis import Taxis
 bp_taxis = Blueprint("taxis", __name__) # create a blueprint for the taxis
 
 
-@bp_taxis.route('/taxis', methods=['GET']) # create a route for the taxis
-def get_taxis():
+@bp_taxis.route('/taxis/<string:plate>/<int:page>/<int:limit>', methods=['GET']) # create a route for the taxis
+def get_taxis(plate, page, limit):
     
     session = get_session()
     
