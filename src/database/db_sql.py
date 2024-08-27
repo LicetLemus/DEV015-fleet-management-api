@@ -7,7 +7,7 @@ import os
 def get_connection():
     
     try:
-        load_dotenv()
+        load_dotenv() #variable of environment
         database_url = os.getenv("DATABASE_URL")
         engine = create_engine(database_url) # create_engine: is used to create a new database connection
         connection = engine.connect() # engine.connect: is used to connect to the database
