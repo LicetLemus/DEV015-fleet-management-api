@@ -3,7 +3,8 @@
 
 from flask import jsonify, Blueprint
 from sqlalchemy import text
-from src.database.db_sql import get_connection
+from src.database.db_sql import get_session
+from src.models.taxis import Taxis
 
 bp_taxis = Blueprint("taxis", __name__) # create a blueprint for the taxis
 
@@ -11,17 +12,18 @@ bp_taxis = Blueprint("taxis", __name__) # create a blueprint for the taxis
 @bp_taxis.route('/taxis', methods=['GET']) # create a route for the taxis
 def get_taxis():
     
-    connection = get_connection()
+    session = get_session()
     
-    if not connection:
+    if not session:
         return jsonify({"error": "Error connecting to the database"})
     
     try:
-        result = connection.execute(text("SELECT id, plate  FROM taxis"))
+        result = session.query(Taxis).all()
+        print(result)
         table_taxis = []
             
         for row in result:
-            table_taxis.append({"id": row[0], "plate": row[1]})
+            table_taxis.append({"id": row.id, "plate": row.plate})
 
         return jsonify({"taxis": table_taxis})
         
@@ -29,5 +31,5 @@ def get_taxis():
         return jsonify({"error": str(e)})
     
     finally:
-        connection.close()
-        print("Connection closed")
+        session.close()
+        print("Session closed")

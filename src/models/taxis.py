@@ -1,9 +1,7 @@
-from sqlalchemy.orm import DeclarativeBase, relationship
-from sqlalchemy import Column, Integer, String, Float, VARCHAR
-
-
-# models taxis models.py
-Base = DeclarativeBase()
+from sqlalchemy.orm import relationship
+from src.models import Base
+from sqlalchemy import Column, Integer, VARCHAR
+from src.models import trajectories
 
 class Taxis(Base):
     
