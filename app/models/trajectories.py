@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, TIMESTAMP, Double, ForeignKey
-from src.models import Base
+from app.models import Base
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 class Trajectories(Base):
