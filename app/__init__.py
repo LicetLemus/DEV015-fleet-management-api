@@ -6,10 +6,10 @@ from app.routes.main import bp_main
 from app.routes.taxis_routes import bp_taxis
 
 # create of instance of the Flask class
-app = Flask(__name__) # create of  instance of the Flask class
-
 
 def create_app():
+    
+    app = Flask(__name__) # create of  instance of the Flask class
     # configuration
     app.config.from_object('app.config.Config') # load the configuration from the config.py file
     

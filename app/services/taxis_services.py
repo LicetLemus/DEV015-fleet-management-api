@@ -33,7 +33,7 @@ def fetch_taxis(plate, page, limit):
         if not table_taxis:
             return {"error": "No taxis found."}, 404
             
-        return table_taxis     
+        return table_taxis
         
     except Exception as e:
         return jsonify({"Error": str(e)})
