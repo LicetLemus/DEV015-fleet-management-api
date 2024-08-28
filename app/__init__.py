@@ -2,8 +2,8 @@
 # Compare this snippet from app/__init__.py: 
 
 from flask import Flask
-from app.routes.taxis_routes import bp_taxis
 from app.routes.main import bp_main 
+from app.routes.taxis_routes import bp_taxis
 
 # create of instance of the Flask class
 app = Flask(__name__) # create of  instance of the Flask class
