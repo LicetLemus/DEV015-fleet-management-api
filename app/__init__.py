@@ -9,6 +9,14 @@ from app.routes.trajectories_routes import bp_location
 # create of instance of the Flask class
 
 def create_app():
+    """
+    Creates and configures an instance of the Flask application.
+    This function initializes the Flask application, loads configuration settings, and registers blueprints to organize the routes of the application.
+
+    Returns:
+        Flask: An instance of the Flask application with configurations and routes set up.
+    """
+    
     
     app = Flask(__name__) # create of  instance of the Flask class
     # configuration

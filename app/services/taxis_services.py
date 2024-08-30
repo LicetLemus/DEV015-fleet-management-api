@@ -3,6 +3,23 @@ from flask import jsonify
 from app.models.taxis import Taxis
 
 def fetch_taxis(plate, page, limit):
+    """
+    Get a list of taxis from the database, with optional filtering and pagination.
+
+    Args:
+        plate (str): Optional filter to return only taxis with the specified license plate.
+        page (int): Page number for pagination. Must be greater than 0.
+        limit (int): Number of records per page for pagination. Must be greater than 0.
+
+    Returns:
+        list or dict: A list of dictionaries representing taxis, or a dictionary with an error message if no taxis are found or if an error occurs.
+        - Each dictionary in the list contains:
+            - "id" (int): The ID of the taxi.
+            - "plate" (str): The license plate of the taxi.
+        - In case of an error, returns a dictionary with:
+            - "error" (str): An error message.
+    """
+    
     session = get_session()
     if session:
         print('conected to data base')
