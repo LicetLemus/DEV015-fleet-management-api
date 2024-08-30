@@ -8,16 +8,24 @@ def get_trajectories():
     date = request.args.get('date', type=str)
     
     if not taxi_id or not date:
-        return jsonify({"error": "taxiId and date are required"}), 400
+        return jsonify({"error": "taxi_id and date are required, Date format must be dd-mm-yyyy"}), 400
 
-    # Convertir la cadena de fecha al formato deseado
-    try:
-        date = datetime.strptime(date, '%d-%m-%Y')
-    except ValueError:
-        return jsonify({"error": "Date format must be dd-mm-yyyy"}), 400
+    # Convertir la cadena a un objeto datetime
+    date_obj = datetime.strptime(date, '%m-%d-%Y')
+    
+    # Ajustar la fecha inicial y final para todo el día
+    date_initial = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)
+    date_end = date_obj.replace(hour=23, minute=59, second=59, microsecond=999999)
+    
+    # Convertir el objeto datetime a formato timestamp
+    date_initial = date_initial.strftime('%Y-%m-%d %H:%M:%S')
+    date_end = date_end.strftime('%Y-%m-%d %H:%M:%S')
 
     try:
-        result_request = fetch_trajectories(taxi_id, date)
+        result_request = fetch_trajectories(taxi_id, date_initial, date_end)
+        
+        if 'error' in result_request:
+            return jsonify(result_request), 404
         
         return jsonify({"trajectories": result_request}), 200
     
