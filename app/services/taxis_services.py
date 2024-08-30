@@ -1,5 +1,6 @@
 from app.database.db_sql import get_session
 from flask import jsonify
+from app.utils.validation_session import validation_session
 from app.models.taxis import Taxis
 
 def fetch_taxis(plate, page, limit):
@@ -7,40 +8,19 @@ def fetch_taxis(plate, page, limit):
     Get a list of taxis from the database, with optional filtering and pagination.
 
     Args:
-        plate (str): Optional filter to return only taxis with the specified license plate.
-        page (int): Page number for pagination. Must be greater than 0.
-        limit (int): Number of records per page for pagination. Must be greater than 0.
+        plate (str, optional): Filter to return only taxis with the specified license plate.
+        page (int, optional): Page number for pagination. Must be greater than 0.
+        limit (int, optional): Number of records per page for pagination. Must be greater than 0.
 
-    Returns:
-        list or dict: A list of dictionaries representing taxis, or a dictionary with an error message if no taxis are found or if an error occurs.
-        - Each dictionary in the list contains:
-            - "id" (int): The ID of the taxi.
-            - "plate" (str): The license plate of the taxi.
-        - In case of an error, returns a dictionary with:
-            - "error" (str): An error message.
+    Return:
+        JSON: A list of taxis or an error message if an error occurs.
     """
-    
     session = get_session()
-    if session:
-        print('conected to data base')
-    
-    if not session:
-        return jsonify({"error": "Error connecting to the database"}), 500
+    validation_session(session)
 
     try:
         result_query = session.query(Taxis)
-
-        if plate:
-            result_query = result_query.filter(Taxis.plate == plate)
-
-        # Implement pagination
-        if page and limit:
-            # Suponiendo que page = 2 y limit = 10
-            # Calcula el número de resultados a omitir
-            offset = (page - 1) * limit 
-            
-            # Si se aplica paginación
-            result_query = result_query.offset(offset).limit(limit)
+        result_query = get_query_with_params(result_query, plate, page, limit)
 
         table_taxis = []
 
@@ -58,3 +38,28 @@ def fetch_taxis(plate, page, limit):
     finally:
         session.close()
         print("Session closed")
+
+
+def get_query_with_params(result_query, plate, page, limit):
+    """
+    Apply optional filtering and pagination to the query.
+
+    Args:
+        result_query (Query): SQLAlchemy query object to be modified.
+        plate (str, optional): Filter to return only records with the specified plate.
+        page (int, optional): Page number for pagination. Must be greater than 0.
+        limit (int, optional): Number of records per page for pagination. Must be greater than 0.
+
+    Return:
+        Query: Modified SQLAlchemy query object with applied filters and pagination.
+    """
+    if plate:
+            return result_query.filter(Taxis.plate == plate)
+
+    if page and limit:
+    # Calcula el número de resultados a omitir
+        offset = (page - 1) * limit 
+        # Si se aplica paginación
+        return result_query.offset(offset).limit(limit)
+    return result_query
+    

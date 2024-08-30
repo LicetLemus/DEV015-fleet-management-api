@@ -27,22 +27,8 @@ def get_trajectories():
     # Check if exist taxi_id and date
     if not taxi_id or not date_str:
         return jsonify({"error": "taxi_id and date are required"}), 400
-
-    # # Validate and convert the date_str to a datetime object
-    try:
-        # convert date string to datetime object
-        date_obj = datetime.strptime(date_str, '%d-%m-%Y')
-    except ValueError:
-        # If it fails, the date format is incorrect
-        return jsonify({"error": "Date format must be dd-mm-yyyy"}), 400
     
-    # Set the start and end of the day for filtering
-    date_initial = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)
-    date_end = date_obj.replace(hour=23, minute=59, second=59, microsecond=999999)
-    
-    # Convert the datetime objects to strings for the query
-    date_initial_str = date_initial.strftime('%Y-%m-%d %H:%M:%S')
-    date_end_str = date_end.strftime('%Y-%m-%d %H:%M:%S')
+    date_initial_str, date_end_str = parse_date(date_str)
 
     try:
         # Fetch trajectories from the database using the given taxi_id and date range
@@ -56,3 +42,13 @@ def get_trajectories():
     except Exception as e:
         # Handle any exceptions that occur during the process
         return jsonify({"Error": str(e)}), 500
+    
+
+def parse_date(date_str):
+    try:
+        date_obj = datetime.strptime(date_str, '%d-%m-%Y')
+        date_initial = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)
+        date_end = date_obj.replace(hour=23, minute=59, second=59, microsecond=999999)
+        return date_initial.strftime('%Y-%m-%d %H:%M:%S'), date_end.strftime('%Y-%m-%d %H:%M:%S')
+    except ValueError:
+        return None, None

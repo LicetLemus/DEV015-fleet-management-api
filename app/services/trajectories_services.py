@@ -1,5 +1,6 @@
 from app.database.db_sql import get_session
 from app.models.trajectories import Trajectories
+from app.utils.validation_session import validation_session
 
 
 def fetch_trajectories(taxi_id, date_initial, date_end):
@@ -25,11 +26,7 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
     print("------------------------------- fetch_trajectories")
     print(taxi_id, date_initial, date_end)
     session = get_session()
-    
-    if not session:
-        return {"error": "Error connecting to the database"}, 500
-    
-    print('connected to database')
+    validation_session(session)
     
     try:
         # Start building the query
