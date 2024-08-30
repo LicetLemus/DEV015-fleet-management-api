@@ -5,4 +5,4 @@ from app import create_app
 app = create_app()
 
 if __name__ == '__main__':
-    app.run() # run the application
+    app.run(debug=True) # run the application

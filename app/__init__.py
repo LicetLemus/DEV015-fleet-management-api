@@ -4,6 +4,7 @@
 from flask import Flask
 from app.routes.main import bp_main 
 from app.routes.taxis_routes import bp_taxis
+from app.routes.trajectories_routes import bp_location
 
 # create of instance of the Flask class
 
@@ -16,5 +17,6 @@ def create_app():
     # Import and register the blueprint: Blueprint is a way to organize the routes of the application.
     app.register_blueprint(bp_main)
     app.register_blueprint(bp_taxis)
+    app.register_blueprint(bp_location)
     
     return app
