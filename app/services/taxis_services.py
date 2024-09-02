@@ -39,7 +39,7 @@ def fetch_taxis(plate, page, limit):
         # Build the response
         if not taxi_results:
             print('entrada if-------------')
-            return ({"error": "No taxis found."})
+            return ({"error": "No taxis found."}), 404
         
         taxi_list = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
         print('taxi------------------', taxi_list)
@@ -51,7 +51,7 @@ def fetch_taxis(plate, page, limit):
             "total_results": len(taxi_list),
             "taxis": taxi_list
         }
-        return response
+        return response, 200
         
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
