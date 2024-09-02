@@ -3,27 +3,28 @@ from app.services.taxis_services import fetch_taxis
 
 def get_taxis():
     """
-    Get taxi information based on optional query parameters.
+    Get taxi information based on optional query parameters for filtering and pagination.
 
     Query Parameters:
-    - plate (str, optional): The plate number of the taxi to filter by. Default is None.
-    - page (int, optional): The page number for pagination. Default is 0.
-    - limit (int, optional): The number of records per page. Default is 0.
+    - plate_filter (str, optional): The plate number to filter taxis by. Default is None.
+    - page_number (int, optional): The page number for pagination. Default is 1.
+    - records_per_page (int, optional): The number of records per page. Default is 10.
 
-    Return:
-    - JSON: A JSON object containing the list of taxis or An error message http
+    Returns:
+    - JSON: A JSON object containing the list of taxis or an error message.
     """
     #get query params
     plate, page, limit = get_query_params()
-    validation_result = validation_page_limit(page, limit)
-    if validation_result:
-        return validation_result
+    
+    if page < 0 or limit < 0:
+        return jsonify({"error": "Page number and limit must be greater than 0."}), 400
 
     try:
-        result_request = fetch_taxis(plate, page, limit)
+        taxis_data = fetch_taxis(plate, page, limit)
+        print('resultado----------------', taxis_data)
         
-        return jsonify({"taxis": result_request}), 200
-    
+        return jsonify(taxis_data), 200
+ 
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
     
@@ -40,18 +41,4 @@ def get_query_params():
     limit = request.args.get('limit', type=int, default=0)
     
     return plate, page, limit
-
-def validation_page_limit(page, limit):
-    """
-    Validate the page number and limit parameters.
     
-    Args:
-    - page (int): Page number.
-    - limit (int): Number of records per page.
-
-    Return:
-    - JSON: An error message and a 400 status code if validation fails, otherwise None.
-    """
-    
-    if page < 0 or limit < 0:
-        return jsonify({"error": "Page number and limit must be greater than 0."}), 400

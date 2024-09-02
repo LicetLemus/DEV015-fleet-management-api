@@ -19,47 +19,44 @@ def fetch_taxis(plate, page, limit):
     validation_session(session)
 
     try:
-        result_query = session.query(Taxis)
-        result_query = get_query_with_params(result_query, plate, page, limit)
-
-        table_taxis = []
-
-        for row in result_query:
-            table_taxis.append({"id": row.id, "plate": row.plate})
+        # Initialize the query
+        query = session.query(Taxis)
         
-        if not table_taxis:
-            return {"error": "No taxis found."}, 404
-            
-        return table_taxis
+        if plate:
+            query = query.filter(Taxis.plate == plate)
+        
+        if page and limit:
+        # Calcula el número de resultados a omitir
+            offset = (page - 1) * limit 
+            # Si se aplica paginación
+            query = query.offset(offset).limit(limit)
+
+        print(query)
+        # Execute the query and fetch results
+        taxi_results = query.all()
+        print('resultado---------------', taxi_results)
+        
+        # Build the response
+        if not taxi_results:
+            print('entrada if-------------')
+            return ({"error": "No taxis found."})
+        
+        taxi_list = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
+        print('taxi------------------', taxi_list)
+        
+        
+        response = {
+            "page": page,
+            "limit": limit,
+            "total_results": len(taxi_list),
+            "taxis": taxi_list
+        }
+        return response
         
     except Exception as e:
-        return jsonify({"Error": str(e)})
+        return jsonify({"Error": str(e)}), 500
         
     finally:
         session.close()
         print("Session closed")
-
-
-def get_query_with_params(result_query, plate, page, limit):
-    """
-    Apply optional filtering and pagination to the query.
-
-    Args:
-        result_query (Query): SQLAlchemy query object to be modified.
-        plate (str, optional): Filter to return only records with the specified plate.
-        page (int, optional): Page number for pagination. Must be greater than 0.
-        limit (int, optional): Number of records per page for pagination. Must be greater than 0.
-
-    Return:
-        Query: Modified SQLAlchemy query object with applied filters and pagination.
-    """
-    if plate:
-            return result_query.filter(Taxis.plate == plate)
-
-    if page and limit:
-    # Calcula el número de resultados a omitir
-        offset = (page - 1) * limit 
-        # Si se aplica paginación
-        return result_query.offset(offset).limit(limit)
-    return result_query
     
