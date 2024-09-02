@@ -31,7 +31,7 @@ def fetch_taxis(plate, page, limit):
             # Si se aplica paginación
             query = query.offset(offset).limit(limit)
 
-        print(query)
+        print('query----------------', query)
         # Execute the query and fetch results
         taxi_results = query.all()
         print('resultado---------------', taxi_results)
@@ -41,7 +41,11 @@ def fetch_taxis(plate, page, limit):
             print('entrada if-------------')
             return ({"error": "No taxis found."}), 404
         
-        taxi_list = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
+        taxi_list = [
+                    {"id": taxi.id, 
+                    "plate": taxi.plate
+                    } 
+                    for taxi in taxi_results]
         print('taxi------------------', taxi_list)
         
         

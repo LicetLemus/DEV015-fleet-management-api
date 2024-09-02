@@ -17,24 +17,21 @@ def get_trajectories():
     
     taxi_id, date_str = get_query_params_trajectories()
     
-    validation_result = validation_query_params_trajectories(taxi_id, date_str)
-    if validation_result:
-        return validation_result
+    if not taxi_id or not date_str:
+        return jsonify({"error": "taxi_id and date are required"}), 400
     
     date_initial_str, date_end_str = parse_date(date_str)
     if not date_initial_str or not date_end_str:
         return jsonify({"error": "Date must be in 'dd-mm-yyyy' format."}), 400
 
     try:
-        result_query = fetch_trajectories(taxi_id, date_initial_str, date_end_str)
+        trajectories_data, status_code = fetch_trajectories(taxi_id, date_initial_str, date_end_str)
+        print('trajectories_result-------', trajectories_data, status_code)
         
-        if 'error' in result_query:
-            return jsonify(result_query), 404
-        
-        return jsonify({"trajectories": result_query}), 200
+        # Return the data or error message
+        return jsonify(trajectories_data), status_code
     
     except Exception as e:
-        # Handle any exceptions that occur during the process
         return jsonify({"Error": str(e)}), 500
 
 
@@ -49,21 +46,6 @@ def get_query_params_trajectories():
     date_str = request.args.get('date', type=str)
     
     return taxi_id, date_str
-
-
-def validation_query_params_trajectories(taxi_id, date_str):
-    """
-    Validate taxi_id and date_str parameters.
-
-    Args:
-    - taxi_id (str): ID of the taxi.
-    - date_str (str): Date in 'dd-mm-yyyy' format.
-
-    Returns:
-    - Flask Response: JSON with an error message and a 400 status code if validation fails, otherwise None.
-    """
-    if not taxi_id or not date_str:
-        return jsonify({"error": "taxi_id and date are required"}), 400
 
 
 def parse_date(date_str):

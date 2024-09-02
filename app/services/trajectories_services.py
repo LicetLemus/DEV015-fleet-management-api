@@ -22,27 +22,48 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
     validation_session(session)
     
     try:
-        # Start building the query
-        result_query = session.query(Trajectories)
-        result_query = get_query_with_params_trajectories(result_query, taxi_id, date_initial, date_end)
-            
+        # Initialize the query
+        query = session.query(Trajectories)
+
+        if taxi_id and date_initial and date_end:
+            query = query.filter(
+                Trajectories.taxi_id == taxi_id,
+                Trajectories.date >= date_initial,
+                Trajectories.date <= date_end)
+        
+        print('query----------------', query)
+        
+        # Execute the query and fetch results
+        trajectories_results = query.all()
+        print('resultado---------------', trajectories_results)
+        
+        # Build the response
+        if not trajectories_results:
+            print('entrada if-------------')
+            return {"error": "No trajectories found."}, 404
+        
         # Prepare to collect the results
         trajectories_list = [
             {
-                "id": row.id,
-                "taxi_id": row.taxi_id,
-                "date": row.date,
-                "latitude": row.latitude,
-                "longitude": row.longitude
+                "id": trajectorie.id,
+                "taxi_id": trajectorie.taxi_id,
+                "date": trajectorie.date,
+                "latitude": trajectorie.latitude,
+                "longitude": trajectorie.longitude
             }
-            for row in result_query
+            for trajectorie in trajectories_results
         ]
         
+        response = {
+            "total_trajectories": len(trajectories_list),
+            "trajectories": trajectories_list
+        }
+        
+        print('trajectories list-------------', response)
+        
         # Check if no results were found
-        if not trajectories_list:
-            return {"error": "No trajectories found."}, 404
-            
-        return trajectories_list
+
+        return response, 200
         
     except Exception as e:
         print(f"Error: {e}")
@@ -51,21 +72,4 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
     finally:
         session.close()
         print("Session closed")
-        
-
-def get_query_with_params_trajectories(result_query, taxi_id, date_initial, date_end):
-    """
-    Get result_query for taxi ID and date from the request.
-    
-    Return:
-        - `taxi_id` (str): The ID of the taxi extracted from the query parameters.
-        - `date_str` (str): The date string extracted from the query parameters.
-    """
-    if taxi_id and date_initial and date_end:
-        return result_query.filter(
-            Trajectories.taxi_id == taxi_id,
-            Trajectories.date >= date_initial,
-            Trajectories.date <= date_end 
-        )
-    return result_query
     
