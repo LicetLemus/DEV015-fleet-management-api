@@ -5,4 +5,14 @@ from app import create_app
 app = create_app()
 
 if __name__ == '__main__':
-    app.run() # run the application
+    """
+    Runs the Flask application in debug mode.
+
+    This script is executed when the module is run as the main program. It initializes the Flask application using the 
+    `create_app` function and starts the development server with debugging enabled.
+    
+    The application will be accessible on the default Flask port (5000) and will provide detailed debugging 
+    information for development purposes.
+    """
+    
+    app.run(debug=True, host='0.0.0.0', port=8000) # run the application
