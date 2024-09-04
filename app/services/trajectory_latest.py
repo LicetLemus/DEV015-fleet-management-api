@@ -1,8 +1,8 @@
 from app.database.db_sql import get_session
 from sqlalchemy import func
 from app.models.trajectories import Trajectories
+from app.models.taxis import Taxis
 from app.utils.validation_session import validation_session
-
 
 def fetch_trajectory_latest():
     session = get_session()
@@ -10,45 +10,52 @@ def fetch_trajectory_latest():
     
     try:
         # Initialize the subquery to find the latest date for each taxi
-        subquery = (session.query(
-            Trajectories.taxi_id,
-            func.max(Trajectories.date).label('latest_date')
+        subquery = (
+            session.query(
+                Trajectories.taxi_id,
+                func.max(Trajectories.date).label('latest_date')
+            )
+            .group_by(Trajectories.taxi_id)
+            .subquery()
         )
-        .group_by(Trajectories.taxi_id)
-        .subquery()
-        )
-        
-        # Main query to join Trajectories with the subquery
+
         query = (
-        session.query(Trajectories)
-        .join(subquery, (Trajectories.taxi_id == subquery.c.taxi_id) & (Trajectories.date == subquery.c.latest_date))
-        .all()
+            session.query(
+            Trajectories.latitude,
+            Trajectories.longitude,
+            Trajectories.date,
+            Trajectories.taxi_id
+            )
+            .join(subquery, (Trajectories.taxi_id == subquery.c.taxi_id) & (Trajectories.date == subquery.c.latest_date))
+            .distinct() #  .distinct() method remove duplicates in query result
         )
+        # print("Main Query SQL:", str(subquery))
         
-        print('subquery----------------', subquery)
+        # Execute the query
+        trajectories_latest_result = query.all()
         
         # Build the response
-        if not query:
-            print('entrada if-------------')
+        if not trajectories_latest_result:
+            print('No trajectories found.')
             return {"error": "No trajectories found."}, 404
         
         # Prepare to collect the results
-        trajectory_list = [
+        trajectories_latest_list = [
             {
-            "taxi_id": trajectory.taxi_id,
-            "date": trajectory.date,
-            "latitude": trajectory.latitude,
-            "longitude": trajectory.longitude
+                "taxi_id": trajectory.taxi_id,
+                "date": trajectory.date,
+                "latitude": trajectory.latitude,
+                "longitude": trajectory.longitude
             }
-            for trajectory in query
+            for trajectory in trajectories_latest_result
         ]
         
         response = {
-            "total_trajectories": len(trajectory_list),
-            "trajectories": trajectory_list
+            "total_trajectories": len(trajectories_latest_list),
+            "trajectories": trajectories_latest_list
         }
         
-        print('trajectories list-------------', response)
+        print('Trajectories List:', response)
 
         return response, 200
         
