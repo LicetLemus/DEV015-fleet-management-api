@@ -16,7 +16,7 @@ def client():
 def  test_get_taxis_all(client, monkeypatch):
     # Mock para la función fetch_taxis
     
-    def mock_fectch_taxis(plate, page, limit):
+    def mock_fetch_taxis(plate, page, limit):
         return {
             "page": page,
             "limit": limit,
@@ -33,7 +33,7 @@ def  test_get_taxis_all(client, monkeypatch):
         
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar 
     # donde esta siendo llamada la funcion
-    monkeypatch.setattr('app.controllers.taxis_controller.fetch_taxis', mock_fectch_taxis)
+    monkeypatch.setattr('app.controllers.taxis_controller.fetch_taxis', mock_fetch_taxis)
     
     response = client.get('/taxis')
     assert response.status_code == 200
@@ -54,7 +54,7 @@ def  test_get_taxis_all(client, monkeypatch):
 def  test_get_taxis_by_plate(client, monkeypatch):
     # Mock para la función fetch_taxis
     
-    def mock_fectch_taxis(plate, page, limit):
+    def mock_fetch_taxis(plate, page, limit):
         return {
             "page": page,
             "limit": limit,
@@ -68,7 +68,7 @@ def  test_get_taxis_by_plate(client, monkeypatch):
 
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar 
     # donde esta siendo llamada la funcion
-    monkeypatch.setattr('app.controllers.taxis_controller.fetch_taxis', mock_fectch_taxis)
+    monkeypatch.setattr('app.controllers.taxis_controller.fetch_taxis', mock_fetch_taxis)
     
     response = client.get('/taxis?plate=CNCJ-2997')
     assert response.status_code == 200
