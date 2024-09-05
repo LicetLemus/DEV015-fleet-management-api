@@ -12,7 +12,7 @@ database_url = os.getenv("DATABASE_URL")
 # create of a new database connection - motor 
 engine = create_engine(database_url) 
 
-# class of SQLAlchemy that create a new instance of session
+# class of SQLAlchemy that create a new instance of session, puente entre la conexion y nuestros modelos
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_session():

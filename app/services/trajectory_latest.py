@@ -24,11 +24,15 @@ def fetch_trajectory_latest():
             Trajectories.latitude,
             Trajectories.longitude,
             Trajectories.date,
-            Trajectories.taxi_id
+            Trajectories.taxi_id,
+            Taxis.plate,
+            Taxis.id
             )
+            .join(Taxis, Trajectories.taxi_id == Taxis.id) # foreignKey taxi_id = Column(Integer, ForeignKey('taxis.id'))
             .join(subquery, (Trajectories.taxi_id == subquery.c.taxi_id) & (Trajectories.date == subquery.c.latest_date))
             .distinct() #  .distinct() method remove duplicates in query result
         )
+        
         # print("Main Query SQL:", str(subquery))
         
         # Execute the query
@@ -36,12 +40,13 @@ def fetch_trajectory_latest():
         
         # Build the response
         if not trajectories_latest_result:
-            print('No trajectories found.')
             return {"error": "No trajectories found."}, 404
         
         # Prepare to collect the results
         trajectories_latest_list = [
             {
+                "id": trajectory.id,
+                "plate": trajectory.plate,
                 "taxi_id": trajectory.taxi_id,
                 "date": trajectory.date,
                 "latitude": trajectory.latitude,
