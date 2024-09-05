@@ -16,11 +16,11 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
     - List of dictionaries with trajectory information if results are found.
     - Dictionary with an error message if no trajectories are found or if there is a problem.
     """
-    
+
     print("------------------------------- fetch_trajectories")
     session = get_session()
     validation_session(session)
-    
+
     try:
         # Initialize the query
         query = session.query(Trajectories)
@@ -29,19 +29,20 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
             query = query.filter(
                 Trajectories.taxi_id == taxi_id,
                 Trajectories.date >= date_initial,
-                Trajectories.date <= date_end)
-        
-        print('query----------------', query)
-        
+                Trajectories.date <= date_end,
+            )
+
+        print("query----------------", query)
+
         # Execute the query and fetch results
         trajectories_results = query.all()
-        print('resultado---------------', trajectories_results)
-        
+        print("resultado---------------", trajectories_results)
+
         # Build the response
         if not trajectories_results:
-            print('entrada if-------------')
+            print("entrada if-------------")
             return {"error": "No trajectories found."}, 404
-        
+
         # Prepare to collect the results
         trajectories_list = [
             {
@@ -49,27 +50,26 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
                 "taxi_id": trajectorie.taxi_id,
                 "date": trajectorie.date,
                 "latitude": trajectorie.latitude,
-                "longitude": trajectorie.longitude
+                "longitude": trajectorie.longitude,
             }
             for trajectorie in trajectories_results
         ]
-        
+
         response = {
             "total_trajectories": len(trajectories_list),
-            "trajectories": trajectories_list
+            "trajectories": trajectories_list,
         }
-        
-        print('trajectories list-------------', response)
-        
+
+        print("trajectories list-------------", response)
+
         # Check if no results were found
 
         return response, 200
-        
+
     except Exception as e:
         print(f"Error: {e}")
         return {"error": str(e)}, 500
-        
+
     finally:
         session.close()
         print("Session closed")
-    

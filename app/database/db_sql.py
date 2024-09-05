@@ -1,7 +1,7 @@
 # conected to the database and execute the sql query
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker 
+from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
 
@@ -9,19 +9,20 @@ import os
 load_dotenv()
 database_url = os.getenv("DATABASE_URL")
 
-# create of a new database connection - motor 
-engine = create_engine(database_url) 
+# create of a new database connection - motor
+engine = create_engine(database_url)
 
-# class of SQLAlchemy that create a new instance of session
+# class of SQLAlchemy that create a new instance of session, puente entre la conexion y nuestros modelos
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 def get_session():
     """
     Create and return a new SQLAlchemy session instance.
 
-    This function establishes a connection to the database using SQLAlchemy's `sessionmaker`. 
-    It loads the database URL from environment variables and creates a session object bound 
-    to the engine created with that URL. If an error occurs while creating the session, 
+    This function establishes a connection to the database using SQLAlchemy's `sessionmaker`.
+    It loads the database URL from environment variables and creates a session object bound
+    to the engine created with that URL. If an error occurs while creating the session,
     it prints an error message.
 
     Returns:
@@ -29,11 +30,10 @@ def get_session():
     - None: If there is an error while connecting to the database.
     pass
     """
-    
+
     try:
-        return SessionLocal() # return of instance session
-    
+        return SessionLocal()  # return of instance session
+
     except Exception as e:
         print("Error al conectar con la base de datos ", e)
         return None
-    

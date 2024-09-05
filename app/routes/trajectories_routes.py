@@ -4,7 +4,7 @@ from app.controllers.trajectories_controller import get_trajectories
 bp_location = Blueprint("trajectories", __name__)
 
 
-@bp_location.route('/trajectories', methods=['GET'])
+@bp_location.route("/trajectories", methods=["GET"])
 def handle_get_trajectories():
     """
     Handle GET requests to the '/trajectories' endpoint.
@@ -12,7 +12,7 @@ def handle_get_trajectories():
     Query Parameters:
     Returns:
     - JSON response with the trajectories data if successful.
-    - JSON response with an error message and HTTP 
+    - JSON response with an error message and HTTP
 
     Example:
     GET /trajectories?taxi_id=123&date=31-12-2023
@@ -23,6 +23,6 @@ def handle_get_trajectories():
     - 404 Not found if the trajectory list is not found
     - 500 Internal Server Error if an exception occurs during processing.
     """
-    
+
     print("------------------------------- handle_get_trajectories")
     return get_trajectories()

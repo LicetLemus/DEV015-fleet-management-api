@@ -3,6 +3,7 @@ from app.models import Base
 from sqlalchemy import Column, Integer, VARCHAR
 from app.models import trajectories
 
+
 class Taxis(Base):
     """
     SQLAlchemy ORM model for the 'taxis' table.
@@ -18,9 +19,9 @@ class Taxis(Base):
     new_taxi = Taxis(id=1, plate='ABC123')
     ```
     """
-    
-    __tablename__="taxis"
-    
+
+    __tablename__ = "taxis"
+
     id = Column(Integer, primary_key=True)
     plate = Column(VARCHAR)
     trajectories = relationship("Trajectories", back_populates="taxis")
