@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, TIMESTAMP, Double, ForeignKey
 from app.models import Base
 from sqlalchemy.orm import DeclarativeBase, relationship
 
+
 class Trajectories(Base):
     """
     SQLAlchemy ORM model for the 'trajectories' table.
@@ -20,11 +21,12 @@ class Trajectories(Base):
     new_trajectory = Trajectories(id=1, taxi_id=1, date=datetime.utcnow(), latitude=12.345, longitude=67.890)
     ```
     """
-    __tablename__= "trajectories"
-    
+
+    __tablename__ = "trajectories"
+
     id = Column(Integer, primary_key=True)
-    taxi_id = Column(Integer, ForeignKey('taxis.id'))
+    taxi_id = Column(Integer, ForeignKey("taxis.id"))
     date = Column(TIMESTAMP)
     latitude = Column(Double)
-    longitude = Column( Double)
+    longitude = Column(Double)
     taxis = relationship("Taxis", back_populates="trajectories")

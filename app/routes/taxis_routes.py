@@ -3,7 +3,8 @@ from app.controllers.taxis_controller import get_taxis
 
 bp_taxis = Blueprint("taxis", __name__)
 
-@bp_taxis.route('/taxis', methods=['GET'])
+
+@bp_taxis.route("/taxis", methods=["GET"])
 def handle_get_taxis():
     """
     Handles GET requests to the /taxis endpoint.
@@ -16,5 +17,5 @@ def handle_get_taxis():
     Returns:
     - JSON response containing a list of taxis or an error message.
     """
-    
+
     return get_taxis()
