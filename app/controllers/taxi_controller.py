@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from app.services.taxis_services import fetch_taxis
+from app.services.taxi_service import fetch_taxis
 
 
 def get_taxis():

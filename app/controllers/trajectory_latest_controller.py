@@ -1,5 +1,5 @@
 from flask import jsonify
-from app.services.trajectory_latest import fetch_trajectory_latest
+from app.services.trajectory_latest_service import fetch_trajectory_latest
 
 
 def get_trajectory_latest():

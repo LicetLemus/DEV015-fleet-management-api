@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.controllers.taxis_controller import get_taxis
+from app.controllers.taxi_controller import get_taxis
 
 bp_taxis = Blueprint("taxis", __name__)
 
