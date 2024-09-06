@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from datetime import datetime
-from app.services.trajectories_services import fetch_trajectories
+from app.services.trajectory_service import fetch_trajectories
 
 
 def get_trajectories():

@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.controllers.trajectory_latest import get_trajectory_latest
+from app.controllers.trajectory_latest_controller import get_trajectory_latest
 
 bp_latest = Blueprint("latest", __name__)
 

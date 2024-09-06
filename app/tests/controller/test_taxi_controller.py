@@ -32,7 +32,7 @@ def test_get_taxis_all(client, monkeypatch):
 
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar
     # donde esta siendo llamada la funcion
-    monkeypatch.setattr("app.controllers.taxis_controller.fetch_taxis", mock_fetch_taxis)
+    monkeypatch.setattr("app.controllers.taxi_controller.fetch_taxis", mock_fetch_taxis)
 
     response = client.get("/taxis")
     assert response.status_code == 200
@@ -62,7 +62,7 @@ def test_get_taxis_by_plate(client, monkeypatch):
 
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar
     # donde esta siendo llamada la funcion
-    monkeypatch.setattr("app.controllers.taxis_controller.fetch_taxis", mock_fetch_taxis)
+    monkeypatch.setattr("app.controllers.taxi_controller.fetch_taxis", mock_fetch_taxis)
 
     response = client.get("/taxis?plate=CNCJ-2997")
     assert response.status_code == 200
@@ -86,7 +86,7 @@ def test_get_taxis_invalid_plate(client, monkeypatch):
     def mock_fetch_taxis(plate, page, limit):
         return {"error": "No taxis found."}, 404
 
-    monkeypatch.setattr("app.controllers.taxis_controller.fetch_taxis", mock_fetch_taxis)
+    monkeypatch.setattr("app.controllers.taxi_controller.fetch_taxis", mock_fetch_taxis)
 
     response = client.get("/taxis?plate=345-")
     assert response.status_code == 404

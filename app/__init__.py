@@ -3,9 +3,9 @@
 
 from flask import Flask
 from app.routes.main import bp_main
-from app.routes.taxis_routes import bp_taxis
-from app.routes.trajectories_routes import bp_location
-from app.routes.trajectory_lastest import bp_latest
+from app.routes.taxi_routes import bp_taxis
+from app.routes.trajectory_routes import bp_location
+from app.routes.trajectory_latest_routes import bp_latest
 
 # create of instance of the Flask class
 

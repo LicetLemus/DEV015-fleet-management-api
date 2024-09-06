@@ -40,7 +40,7 @@ def test_get_trajectory_latest(client, monkeypatch):
         }, 200
 
     monkeypatch.setattr(
-        "app.controllers.trajectory_latest.fetch_trajectory_latest",
+        "app.controllers.trajectory_latest_controller.fetch_trajectory_latest",
         mock_fetch_trajectory_latest,
     )
 
@@ -77,7 +77,7 @@ def test_get_trajectories_latest_exception(client, monkeypatch):
         raise Exception("Unexpected error")
 
     monkeypatch.setattr(
-        "app.controllers.trajectory_latest.fetch_trajectory_latest",
+        "app.controllers.trajectory_latest_controller.fetch_trajectory_latest",
         mock_fetch_trajectory_latest,
     )
 

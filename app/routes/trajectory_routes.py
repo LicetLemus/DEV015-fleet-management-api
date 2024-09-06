@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.controllers.trajectories_controller import get_trajectories
+from app.controllers.trajectory_controller import get_trajectories
 
 bp_location = Blueprint("trajectories", __name__)
 

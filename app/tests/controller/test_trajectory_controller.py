@@ -20,7 +20,7 @@ def test_get_trajectories_success(client, monkeypatch):
         return "1234", "02-02-2022"
 
     monkeypatch.setattr(
-        "app.controllers.trajectories_controller.get_query_params_trajectories",
+        "app.controllers.trajectory_controller.get_query_params_trajectories",
         mock_get_query_params_trajectories,
     )
 
@@ -49,7 +49,7 @@ def test_get_trajectories_success(client, monkeypatch):
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar
     # donde esta siendo llamada la funcion
     monkeypatch.setattr(
-        "app.controllers.trajectories_controller.fetch_trajectories",
+        "app.controllers.trajectory_controller.fetch_trajectories",
         mock_fetch_trajectories,
     )
 
@@ -81,7 +81,7 @@ def test_get_trajectories_missing_params(client, monkeypatch):
         return None, None
 
     monkeypatch.setattr(
-        "app.controllers.trajectories_controller.get_query_params_trajectories",
+        "app.controllers.trajectory_controller.get_query_params_trajectories",
         mock_get_query_params_trajectories,
     )
 
@@ -95,7 +95,7 @@ def test_get_trajectories_invalid_date(client, monkeypatch):
         return "1234", "02-02-22"
 
     monkeypatch.setattr(
-        "app.controllers.trajectories_controller.get_query_params_trajectories",
+        "app.controllers.trajectory_controller.get_query_params_trajectories",
         mock_get_query_params_trajectories,
     )
 
@@ -109,7 +109,7 @@ def test_get_trajectories_exception(client, monkeypatch):
         return "3456", "02-02-2028"
 
     monkeypatch.setattr(
-        "app.controllers.trajectories_controller.get_query_params_trajectories",
+        "app.controllers.trajectory_controller.get_query_params_trajectories",
         mock_get_query_params_trajectories,
     )
 
@@ -117,7 +117,7 @@ def test_get_trajectories_exception(client, monkeypatch):
         raise Exception("Unexpected error")
 
     monkeypatch.setattr(
-        "app.controllers.trajectories_controller.fetch_trajectories",
+        "app.controllers.trajectory_controller.fetch_trajectories",
         mock_fetch_trajectories,
     )
 
