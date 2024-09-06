@@ -1,7 +1,6 @@
 import pytest
 from flask import Flask, jsonify
 from app import create_app
-from app.services.taxis_services import fetch_taxis
 
 
 # fixture, configurado para proporcionar un cliente de prueba para las solicitudes HTTP.

@@ -1,7 +1,6 @@
 import pytest
 from flask import Flask, jsonify
 from app import create_app
-from app.services.trajectories_services import fetch_trajectories
 
 
 # fixture, configurado para proporcionar un cliente de prueba para las solicitudes HTTP.
@@ -108,14 +107,20 @@ def test_get_trajectories_invalid_date(client, monkeypatch):
 def test_get_trajectories_exception(client, monkeypatch):
     def mock_get_query_params_trajectories():
         return "3456", "02-02-2028"
-    
-    monkeypatch.setattr("app.controllers.trajectories_controller.get_query_params_trajectories", mock_get_query_params_trajectories)
-    
+
+    monkeypatch.setattr(
+        "app.controllers.trajectories_controller.get_query_params_trajectories",
+        mock_get_query_params_trajectories,
+    )
+
     def mock_fetch_trajectories(taxi_id, date_initial_str, date_end_str):
         raise Exception("Unexpected error")
-    
-    monkeypatch.setattr("app.controllers.trajectories_controller.fetch_trajectories", mock_fetch_trajectories)
-    
+
+    monkeypatch.setattr(
+        "app.controllers.trajectories_controller.fetch_trajectories",
+        mock_fetch_trajectories,
+    )
+
     response = client.get("/trajectories?taxi_id=3456&date=02-02-2028")
     assert response.status_code == 500
     assert response.json == {"Error": "Unexpected error"}
