@@ -43,26 +43,17 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
             print("entrada if-------------")
             return {"error": "No trajectories found."}, 404
 
-        # Prepare to collect the results
-        trajectories_list = [
+        # Prepare to response the results
+        response = [
             {
                 "id": trajectorie.id,
-                "taxi_id": trajectorie.taxi_id,
+                "taxiId": trajectorie.taxi_id,
                 "date": trajectorie.date,
                 "latitude": trajectorie.latitude,
                 "longitude": trajectorie.longitude,
             }
             for trajectorie in trajectories_results
         ]
-
-        response = {
-            "total_trajectories": len(trajectories_list),
-            "trajectories": trajectories_list,
-        }
-
-        print("trajectories list-------------", response)
-
-        # Check if no results were found
 
         return response, 200
 

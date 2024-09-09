@@ -45,7 +45,7 @@ def get_query_params_trajectories():
     Returns:
     - (taxi_id, date_str)
     """
-    taxi_id = request.args.get("taxi_id", type=str)
+    taxi_id = request.args.get("taxiId", type=str)
     date_str = request.args.get("date", type=str)
 
     return taxi_id, date_str
