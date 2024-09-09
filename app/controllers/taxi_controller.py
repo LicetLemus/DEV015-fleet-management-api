@@ -40,7 +40,7 @@ def get_query_parameters():
     - the 'plate', 'page', and 'limit' parameters.
     """
     plate = request.args.get("plate", type=str, default=None)
-    page = request.args.get("page", type=int, default=0)
-    limit = request.args.get("limit", type=int, default=0)
+    page = request.args.get("page", type=int, default=1)
+    limit = request.args.get("limit", type=int, default=10)
 
     return plate, page, limit

@@ -24,7 +24,7 @@ def fetch_taxis(plate, page, limit):
         query = session.query(Taxis)
 
         if plate:
-            query = query.filter(Taxis.plate == plate)
+            query = query.filter(Taxis.plate.ilike(f"%{plate}%"))
 
         if page and limit:
             # Calcula el número de resultados a omitir
@@ -39,14 +39,8 @@ def fetch_taxis(plate, page, limit):
         if not taxi_results:
             return ({"error": "No taxis found."}), 404
 
-        taxi_list = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
+        response = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
 
-        response = {
-            "page": page,
-            "limit": limit,
-            "total_results": len(taxi_list),
-            "taxis": taxi_list,
-        }
         return response, 200
 
     except Exception as e:
