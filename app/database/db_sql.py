@@ -5,6 +5,8 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
 
+from app.models import Base
+
 # load of variable of environment
 load_dotenv()
 database_url = os.getenv("DATABASE_URL")
@@ -31,3 +33,8 @@ def get_session():
     except Exception as e:
         print("Error al conectar con la base de datos ", e)
         return None
+
+# Crear las tablas
+def create_tables():
+    ('aqui mas--------------------------')
+    Base.metadata.create_all(bind=engine)
