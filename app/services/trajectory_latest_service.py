@@ -6,6 +6,15 @@ from app.utils.validation_session import validation_session
 
 
 def fetch_trajectory_latest():
+    """
+    Fetch the latest trajectory for each taxi.
+
+    Return:
+        tuple: (list of latest trajectories or error message, HTTP status code)
+            - 200: OK with list of latest trajectories
+            - 404: No trajectories found
+            - 500: Internal server error if an exception occurs
+    """
     session = get_session()
     validation_session(session)
 
@@ -21,12 +30,11 @@ def fetch_trajectory_latest():
 
         query = (
             session.query(
+                Taxis.id,
                 Trajectories.latitude,
                 Trajectories.longitude,
-                Trajectories.date,
-                Trajectories.taxi_id,
                 Taxis.plate,
-                Taxis.id,
+                Trajectories.date,
             )
             # .join(target, onclause)
             # target: The table or entity to which you want to join the parent table.
@@ -42,7 +50,7 @@ def fetch_trajectory_latest():
             .distinct()  #  .distinct() method remove duplicates in query result
         )
 
-        # print("Main Query SQL:", str(subquery))
+        print("Main Query SQL:", str(query))
 
         # Execute the query
         trajectories_latest_result = query.all()
@@ -52,24 +60,16 @@ def fetch_trajectory_latest():
             return {"error": "No trajectories found."}, 404
 
         # Prepare to collect the results
-        trajectories_latest_list = [
+        response = [
             {
-                "id": trajectory.id,
-                "plate": trajectory.plate,
-                "taxi_id": trajectory.taxi_id,
-                "date": trajectory.date,
+                "taxiId": trajectory.id,
                 "latitude": trajectory.latitude,
                 "longitude": trajectory.longitude,
+                "plate": trajectory.plate,
+                "timestamp": trajectory.date,
             }
             for trajectory in trajectories_latest_result
         ]
-
-        response = {
-            "total_trajectories": len(trajectories_latest_list),
-            "trajectories": trajectories_latest_list,
-        }
-
-        print("Trajectories List:", response)
 
         return response, 200
 

@@ -10,16 +10,19 @@ class Trajectories(Base):
     Attributes:
     - id (int): Primary key of the trajectory record.
     - taxi_id (int): Foreign key referencing the 'taxis' table.
-    - date (datetime): Timestamp of the trajectory record.
+    - date (datetime): Timestamp of the trajectory.
     - latitude (float): Latitude of the trajectory.
     - longitude (float): Longitude of the trajectory.
-    - taxis (relationship): Many-to-one relationship with 'Taxis'.
+    - taxis (relationship): Many-to-one relationship with the 'Taxis' model.
 
-    Usage:
-    Create a new trajectory:
-    ```python
-    new_trajectory = Trajectories(id=1, taxi_id=1, date=datetime.utcnow(), latitude=12.345, longitude=67.890)
-    ```
+    Example:
+        new_trajectory = Trajectories(
+            id=1,
+            taxi_id=1,
+            date=datetime.utcnow(),
+            latitude=12.345,
+            longitude=67.890
+        )
     """
 
     __tablename__ = "trajectories"

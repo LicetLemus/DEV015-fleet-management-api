@@ -5,16 +5,18 @@ from app.utils.validation_session import validation_session
 
 def fetch_trajectories(taxi_id, date_initial, date_end):
     """
-    Gets trajectories for a taxi with taxi_id and date range from the database.
+    Retrieves trajectories for a taxi within a date range.
 
-    Parameters:
-    - taxi_id: ID of the taxi (string).
-    - date_initial: Start date of the range in 'YYYY-MM-DD HH:MM:SS' format.
-    - date_end: End date of the range in 'YYYY-MM-DD HH:MM:SS' format.
+    Args:
+        taxi_id (str): Taxi ID.
+        date_initial (str): Start date ('YYYY-MM-DD HH:MM:SS').
+        date_end (str): End date ('YYYY-MM-DD HH:MM:SS').
 
     Returns:
-    - List of dictionaries with trajectory information if results are found.
-    - Dictionary with an error message if no trajectories are found or if there is a problem.
+        tuple: (List of trajectories or error message, HTTP status code)
+            - 200: Success with data.
+            - 404: No data found.
+            - 500: Server error.
     """
 
     print("------------------------------- fetch_trajectories")
@@ -43,26 +45,17 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
             print("entrada if-------------")
             return {"error": "No trajectories found."}, 404
 
-        # Prepare to collect the results
-        trajectories_list = [
+        # Prepare to response the results
+        response = [
             {
                 "id": trajectorie.id,
-                "taxi_id": trajectorie.taxi_id,
+                "taxiId": trajectorie.taxi_id,
                 "date": trajectorie.date,
                 "latitude": trajectorie.latitude,
                 "longitude": trajectorie.longitude,
             }
             for trajectorie in trajectories_results
         ]
-
-        response = {
-            "total_trajectories": len(trajectories_list),
-            "trajectories": trajectories_list,
-        }
-
-        print("trajectories list-------------", response)
-
-        # Check if no results were found
 
         return response, 200
 
