@@ -6,70 +6,61 @@ from sqlalchemy.orm import Query
 
 @pytest.fixture
 def mock_session(mocker):
-    """
-    Fixture para crear una sesión SQLAlchemy mock.
-    """
-    session = mocker.MagicMock()
-    query_mock = mocker.MagicMock(spec=Query)
-    subquery_mock = mocker.MagicMock()
-
-    # Mockear el subquery para devolver datos mock
-    subquery_mock.c.taxi_id = "taxi_id"
-    subquery_mock.c.latest_date = "latest_date"
-    session.query.return_value.subquery.return_value = subquery_mock
-
-    return session
+    mock = mocker.Mock()
+    return mock
 
 
-def test_fetch_trajectory_latest_with_results(mocker, mock_session):
-    taxi = MagicMock()
-    taxi.plate = "XYZ-1234"
-
-    trajectory1 = MagicMock(
-        id=1,
-        taxi_id=8935,
-        date="Sat Feb 02 2008 16:37:40",
-        latitude=119.45367,
-        longitude=120.72647,
-        plate=taxi.plate,
-    )
-
-    trajectory2 = MagicMock(
-        id=2,
-        taxi_id=8935,
-        date="Sat Feb 02 2008 12:37:40",
+def test_fetch_trajectory_latest_success(mocker, mock_session):
+    # Crear datos de prueba
+    trajectory = MagicMock(
+        id=8935,
         latitude=117.45367,
         longitude=118.72647,
-        plate=taxi.plate,
+        plate="XYZ-1234",
+        date="Sat Feb 08 2008 12:37:40",
     )
 
-    trajectory3 = MagicMock(
-        id=3,
-        taxi_id=8935,
-        date="Sat Feb 02 2008 13:37:40",
-        latitude=116.45367,
-        longitude=115.72647,
-        plate=taxi.plate,
-    )
-
-    # Mockear la sesión para devolver la lista completa de trayectorias
+    # Configurar el mock de la sesión para devolver datos de prueba
     mock_session.query.return_value.join.return_value.join.return_value.distinct.return_value.all.return_value = [
-        trajectory1
+        trajectory
     ]
 
-    # Simular la función get_session para devolver la sesión mock
+    # Configurar el mock de get_session
     mocker.patch(
         "app.services.trajectory_latest_service.get_session", return_value=mock_session
     )
+    mocker.patch("app.services.trajectory_latest_service.validation_session")
 
-    # Llamar a la función y obtener la respuesta
+    # Llamar a la función
     response, status_code = fetch_trajectory_latest()
 
-    # Verificar el estado y la respuesta
+    # Verificar los resultados
     assert status_code == 200
-    assert response["total_trajectories"] == 1
-    assert response["trajectories"][0]["date"] == "Sat Feb 02 2008 16:37:40"
-    assert response["trajectories"][0]["plate"] == "XYZ-1234"
+    assert response[0]["taxiId"] == 8935
+    assert response[0]["latitude"] == 117.45367
+    assert response[0]["longitude"] == 118.72647
+    assert response[0]["plate"] == "XYZ-1234"
+    assert response[0]["timestamp"] == "Sat Feb 08 2008 12:37:40"
+
+
+def test_fetch_trajectory_latest_no_results(mocker, mock_session):
+    # Configurar el mock de la sesión para devolver una lista vacía
+    mock_session.query.return_value.join.return_value.join.return_value.distinct.return_value.all.return_value = (
+        []
+    )
+
+    # Configurar el mock de get_session
+    mocker.patch(
+        "app.services.trajectory_latest_service.get_session", return_value=mock_session
+    )
+    mocker.patch("app.services.trajectory_latest_service.validation_session")
+
+    # Llamar a la función
+    response, status_code = fetch_trajectory_latest()
+
+    # Verificar los resultados
+    assert status_code == 404
+    assert response["error"] == "No trajectories found."
 
 
 def test_fetch_trajectory_latest_with_exception(mocker, mock_session):
@@ -86,3 +77,31 @@ def test_fetch_trajectory_latest_with_exception(mocker, mock_session):
 
     assert status_code == 500
     assert response["error"] == "Database error"
+
+
+def test_fetch_trajectory_latest_session_closes(mocker, mock_session):
+    # Crear datos de prueba
+    trajectory = MagicMock(
+        id=8935,
+        latitude=117.45367,
+        longitude=118.72647,
+        plate="XYZ-1234",
+        date="Sat Feb 08 2008 12:37:40",
+    )
+
+    # Configurar el mock de la sesión para devolver datos de prueba
+    mock_session.query.return_value.join.return_value.join.return_value.distinct.return_value.all.return_value = [
+        trajectory
+    ]
+
+    # Configurar el mock de get_session
+    mocker.patch(
+        "app.services.trajectory_latest_service.get_session", return_value=mock_session
+    )
+    mocker.patch("app.services.trajectory_latest_service.validation_session")
+
+    # Llamar a la función
+    fetch_trajectory_latest()
+
+    # Verificar que la sesión se cierra
+    mock_session.close.assert_called_once()

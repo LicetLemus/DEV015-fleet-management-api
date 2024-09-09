@@ -82,6 +82,5 @@ def test_fetch_trajectories_parameters(mocker, mock_session):
     )
 
     assert status_code == 200
-    assert response["total_trajectories"] == 3
-    assert response["trajectories"][0]["date"] == "Sat Feb 02 2008 13:37:40"
-    assert response["trajectories"][1]["date"] == "Sat Feb 02 2008 12:37:40"
+    assert response[0]["date"] == "Sat Feb 02 2008 13:37:40"
+    assert response[1]["date"] == "Sat Feb 02 2008 12:37:40"

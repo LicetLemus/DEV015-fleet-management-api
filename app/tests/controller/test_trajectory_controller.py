@@ -15,36 +15,33 @@ def client():
 
 def test_get_trajectories_success(client, monkeypatch):
 
-    # Mock para los parámetros de consulta (query params)
-    def mock_get_query_params_trajectories():
-        return "1234", "02-02-2022"
-
-    monkeypatch.setattr(
-        "app.controllers.trajectory_controller.get_query_params_trajectories",
-        mock_get_query_params_trajectories,
-    )
-
     # mock fetch_trajectories
     def mock_fetch_trajectories(taxi_id, date_initial, date_end):
-        return {
-            "total_trajectories": 2,
-            "trajectories": [
-                {
-                    "id": 1,
-                    "taxi_id": taxi_id,
-                    "date": date_initial,
-                    "latitude": 12.34,
-                    "longitude": 56.78,
-                },
-                {
-                    "id": 2,
-                    "taxi_id": taxi_id,
-                    "date": date_end,
-                    "latitude": 12.34,
-                    "longitude": 56.78,
-                },
-            ],
-        }, 200
+        if taxi_id != "7088":  # Simula que solo el taxi_id "1234" tiene datos
+            return [], 404
+        return [
+            {
+                "date": "Sat, 02 Feb 2008 14:36:10 GMT",
+                "id": 8521,
+                "latitude": 116.44724,
+                "longitude": 39.89008,
+                "taxiId": 7088,
+            },
+            {
+                "date": "Sat, 02 Feb 2008 14:39:26 GMT",
+                "id": 8522,
+                "latitude": 116.44964,
+                "longitude": 39.88968,
+                "taxiId": 7088,
+            },
+            {
+                "date": "Sat, 02 Feb 2008 14:41:36 GMT",
+                "id": 8523,
+                "latitude": 116.44951,
+                "longitude": 39.89012,
+                "taxiId": 7088,
+            },
+        ], 200
 
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar
     # donde esta siendo llamada la funcion
@@ -53,27 +50,31 @@ def test_get_trajectories_success(client, monkeypatch):
         mock_fetch_trajectories,
     )
 
-    response = client.get("/trajectories?taxi_id=1234&date=02-02-2022")
+    response = client.get("/trajectories?taxiId=7088&date=02-02-2008")
     assert response.status_code == 200
-    assert response.json == {
-        "total_trajectories": 2,
-        "trajectories": [
-            {
-                "id": 1,
-                "taxi_id": "1234",
-                "date": "2022-02-02 00:00:00",
-                "latitude": 12.34,
-                "longitude": 56.78,
-            },
-            {
-                "id": 2,
-                "taxi_id": "1234",
-                "date": "2022-02-02 23:59:59",
-                "latitude": 12.34,
-                "longitude": 56.78,
-            },
-        ],
-    }
+    assert response.json == [
+        {
+            "date": "Sat, 02 Feb 2008 14:36:10 GMT",
+            "id": 8521,
+            "latitude": 116.44724,
+            "longitude": 39.89008,
+            "taxiId": 7088,
+        },
+        {
+            "date": "Sat, 02 Feb 2008 14:39:26 GMT",
+            "id": 8522,
+            "latitude": 116.44964,
+            "longitude": 39.88968,
+            "taxiId": 7088,
+        },
+        {
+            "date": "Sat, 02 Feb 2008 14:41:36 GMT",
+            "id": 8523,
+            "latitude": 116.44951,
+            "longitude": 39.89012,
+            "taxiId": 7088,
+        },
+    ]
 
 
 def test_get_trajectories_missing_params(client, monkeypatch):

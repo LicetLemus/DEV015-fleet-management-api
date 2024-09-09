@@ -20,15 +20,14 @@ def test_get_taxis_all(client, monkeypatch):
     # Mock para la función fetch_taxis
 
     def mock_fetch_taxis(plate, page, limit):
-        return {
-            "page": page,
-            "limit": limit,
-            "total_results": 2,
-            "taxis": [
-                {"id": 1, "plate": "ABC123"},
-                {"id": 2, "plate": "ASD234"},
-            ],
-        }, 200
+        return [{
+            "id": 7249, 
+            "plate": "CNCJ-2997"
+        },
+        {
+            "id": 10133,
+            "plate": "PAOF-6727"
+        }], 200
 
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar
     # donde esta siendo llamada la funcion
@@ -36,29 +35,23 @@ def test_get_taxis_all(client, monkeypatch):
 
     response = client.get("/taxis")
     assert response.status_code == 200
-    assert response.json == {
-        "page": 0,
-        "limit": 0,
-        "total_results": 2,
-        "taxis": [
-            {"id": 1, "plate": "ABC123"},
-            {"id": 2, "plate": "ASD234"},
-        ],
-    }
+    assert response.json == [{
+            "id": 7249, 
+            "plate": "CNCJ-2997"
+        },
+        {
+            "id": 10133,
+            "plate": "PAOF-6727"
+        }]
 
 
 def test_get_taxis_by_plate(client, monkeypatch):
     # Mock para la función fetch_taxis
 
     def mock_fetch_taxis(plate, page, limit):
-        return {
-            "page": page,
-            "limit": limit,
-            "total_results": 1,
-            "taxis": [
+        return [
                 {"id": 2, "plate": "CNCJ-2997"},
-            ],
-        }, 200
+            ], 200
 
     # Usar monkeypatch para reemplazar fetch_taxis con mock_fetch_taxis, se apunta al lugar
     # donde esta siendo llamada la funcion
@@ -66,14 +59,9 @@ def test_get_taxis_by_plate(client, monkeypatch):
 
     response = client.get("/taxis?plate=CNCJ-2997")
     assert response.status_code == 200
-    assert response.json == {
-        "page": 0,
-        "limit": 0,
-        "total_results": 1,
-        "taxis": [
-            {"id": 2, "plate": "CNCJ-2997"},
-        ],
-    }
+    assert response.json == [
+                {"id": 2, "plate": "CNCJ-2997"},
+            ]
 
 
 def test_get_taxis_invalid_parameters(client):

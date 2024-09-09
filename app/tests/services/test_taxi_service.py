@@ -50,12 +50,11 @@ def test_fetch_taxis_no_filter(mocker, mock_session):
     mocker.patch("app.services.taxi_service.get_session", return_value=mock_session)
 
     # Call the `fetch_taxis` function without a filter
-    response, status_code = fetch_taxis(None, 0, 0)
+    response, status_code = fetch_taxis(None, 1, 10)
 
     assert status_code == 200
-    assert response["total_results"] == 2
-    assert response["taxis"][0]["plate"] == "CCKF-1601"
-    assert response["taxis"][1]["plate"] == "LAHG-7611"
+    assert response[0]["plate"] == "CCKF-1601"
+    assert response[1]["plate"] == "LAHG-7611"
 
 
 def test_fetch_taxis_with_filter(mocker, mock_session):
@@ -69,9 +68,7 @@ def test_fetch_taxis_with_filter(mocker, mock_session):
     response, status_code = fetch_taxis("CCKF-1601", 1, 10)
 
     assert status_code == 200
-    assert response["total_results"] == 1
-    assert len(response["taxis"]) == 1
-    assert response["taxis"][0]["plate"] == "CCKF-1601"
+    assert response[0]["plate"] == "CCKF-1601"
 
 
 def test_fetch_taxis_no_results(mocker, mock_session):
