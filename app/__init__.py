@@ -6,6 +6,10 @@ from app.routes.main import bp_main
 from app.routes.taxi_routes import bp_taxis
 from app.routes.trajectory_routes import bp_location
 from app.routes.trajectory_latest_routes import bp_latest
+from app.routes.create_user import bp_create_user
+
+from app.models.users import Users
+from app.database.db_sql import create_tables  # Importar la función para crear tablas
 
 # create of instance of the Flask class
 
@@ -30,5 +34,12 @@ def create_app():
     app.register_blueprint(bp_taxis)
     app.register_blueprint(bp_location)
     app.register_blueprint(bp_latest)
+    app.register_blueprint(bp_create_user)
 
+    try:
+        with app.app_context():
+            print("Creating tables...")
+            create_tables()
+    except Exception as e:
+        print(f"Error al crear las tablas: {e}")
     return app
