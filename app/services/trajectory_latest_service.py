@@ -6,6 +6,15 @@ from app.utils.validation_session import validation_session
 
 
 def fetch_trajectory_latest():
+    """
+    Fetch the latest trajectory for each taxi.
+
+    Return:
+        tuple: (list of latest trajectories or error message, HTTP status code)
+            - 200: OK with list of latest trajectories
+            - 404: No trajectories found
+            - 500: Internal server error if an exception occurs
+    """
     session = get_session()
     validation_session(session)
 
@@ -58,7 +67,7 @@ def fetch_trajectory_latest():
                 "longitude": trajectory.longitude,
                 "plate": trajectory.plate,
                 "timestamp": trajectory.date,
-            } 
+            }
             for trajectory in trajectories_latest_result
         ]
 

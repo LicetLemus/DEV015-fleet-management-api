@@ -4,17 +4,18 @@ from app.services.taxi_service import fetch_taxis
 
 def get_taxis():
     """
-    Get taxi information based on optional query parameters for filtering and pagination.
+    Fetch taxi information with optional filtering and pagination.
 
     Query Parameters:
-    - plate (str, optional): The plate number to filter taxis by. Default is None.
-    - page (int, optional): The page number for pagination. Default is 1.
-    - limit (int, optional): The number of records per page. Default is 10.
+        - plate (str, optional): Filter taxis by plate number.
+        - page (int, optional): Page number for pagination (default is 1).
+        - limit (int, optional): Records per page (default is 10).
 
-    Returns:
-    - JSON: A JSON object containing the list of taxis or an error message.
+    Return:
+        - JSON response with taxi data or error message.
+        - Status code: 200 (OK), 400 (Bad Request), 404 (Not Found), 500 (Internal Server Error).
     """
-    # get query params
+
     plate, page, limit = get_query_parameters()
 
     if page < 0 or limit < 0:
@@ -23,9 +24,8 @@ def get_taxis():
     try:
         # Fetch taxi data from service
         taxis_data, status_code = fetch_taxis(plate, page, limit)
-        print("taxis_result-------", taxis_data, status_code)
 
-        # Return the data or error message
+        # Return the data and status
         return jsonify(taxis_data), status_code
 
     except Exception as e:
@@ -34,10 +34,12 @@ def get_taxis():
 
 def get_query_parameters():
     """
-    get query parameters from the request.
+    Get query parameters for taxi filtering and pagination.
 
-    Return:
-    - the 'plate', 'page', and 'limit' parameters.
+    Returns:
+        - plate (str or None): Plate number for filtering.
+        - page (int): Page number (default is 1).
+        - limit (int): Number of records per page (default is 10).
     """
     plate = request.args.get("plate", type=str, default=None)
     page = request.args.get("page", type=int, default=1)

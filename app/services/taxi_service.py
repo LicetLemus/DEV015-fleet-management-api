@@ -6,15 +6,18 @@ from app.models.taxis import Taxis
 
 def fetch_taxis(plate, page, limit):
     """
-    Get a list of taxis from the database, with optional filtering and pagination.
+    Fetch taxis with optional filtering and pagination.
 
     Args:
-        plate (str, optional): Filter to return only taxis with the specified license plate.
-        page (int, optional): Page number for pagination. Must be greater than 0.
-        limit (int, optional): Number of records per page for pagination. Must be greater than 0.
+        plate (str): Optional filter by license plate.
+        page (int): Page number (must be > 0).
+        limit (int): Number of records per page (must be > 0).
 
     Return:
-        JSON: A list of taxis or an error message if an error occurs.
+        list: (list of taxis or error message, HTTP status code)
+            - 200: OK
+            - 404: Not Found
+            - 500: Internal Server Error
     """
     session = get_session()
     validation_session(session)

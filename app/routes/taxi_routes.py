@@ -9,13 +9,11 @@ def handle_get_taxis():
     """
     Handles GET requests to the /taxis endpoint.
 
-    This endpoint get a list of taxis based on optional query parameters:
-    - `plate` (str): Filter taxis by their license plate.
-    - `page` (int): The page number for pagination.
-    - `limit` (int): The number of records per page for pagination.
+    Calls `get_taxis` to retrieve and return taxi data based on optional query parameters.
 
     Returns:
-    - JSON response containing a list of taxis or an error message.
+        - JSON: Taxi data or an error message.
+        - Status Code: 200 for success, 400 for bad request, or 500 for internal error.
     """
 
     return get_taxis()

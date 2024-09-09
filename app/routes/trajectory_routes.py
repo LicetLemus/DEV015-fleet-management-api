@@ -7,21 +7,11 @@ bp_location = Blueprint("trajectories", __name__)
 @bp_location.route("/trajectories", methods=["GET"])
 def handle_get_trajectories():
     """
-    Handle GET requests to the '/trajectories' endpoint.
-
-    Query Parameters:
-    Returns:
-    - JSON response with the trajectories data if successful.
-    - JSON response with an error message and HTTP
-
-    Example:
-    GET /trajectories?taxi_id=123&date=31-12-2023
+    Fetches trajectory data based on `taxiId` and `date`.
 
     Returns:
-    - 200 OK with a JSON object containing the trajectories if the request is successful.
-    - 400 Bad Request if required parameters are missing or the date format is incorrect.
-    - 404 Not found if the trajectory list is not found
-    - 500 Internal Server Error if an exception occurs during processing.
+    - JSON with trajectory data or error message.
+    - Status code: 200, 400, 404, 500.
     """
 
     print("------------------------------- handle_get_trajectories")
