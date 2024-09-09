@@ -5,16 +5,16 @@ from app.services.trajectory_service import fetch_trajectories
 
 def get_trajectories():
     """
-    Gets all trajectories for a specific taxi within a date range.
+    Get trajectories for a specific taxi within a date range.
 
     Query Parameters:
-    - taxi_id (str): ID of the taxi.
-    - date (str): Date in 'dd-mm-yyyy' format.
+        - taxiId (str): Taxi ID (required).
+        - date (str): Date in 'dd-mm-yyyy' format (required).
 
     Returns:
-    - Flask Response: JSON with the list of trajectories or an error message.
+        - JSON list of trajectories or an error message.
+        - Status codes: 200 (OK), 400 (Bad Request), 404 (Not Found), 500 (Internal Server Error).
     """
-    print("------------------------------- get_trajectories")
 
     taxi_id, date_str = get_query_params_trajectories()
 
@@ -40,12 +40,13 @@ def get_trajectories():
 
 def get_query_params_trajectories():
     """
-    Retrieve query parameters for taxi ID and date from the request.
+    Extracts query parameters for taxi ID and date.
 
-    Returns:
-    - (taxi_id, date_str)
+    Return:
+        - taxi_id (str): Taxi ID.
+        - date_str (str): Date in 'dd-mm-yyyy' format.
     """
-    taxi_id = request.args.get("taxi_id", type=str)
+    taxi_id = request.args.get("taxiId", type=str)
     date_str = request.args.get("date", type=str)
 
     return taxi_id, date_str
@@ -53,13 +54,13 @@ def get_query_params_trajectories():
 
 def parse_date(date_str):
     """
-    Parse the date string and return the start and end of the day in 'YYYY-MM-DD HH:MM:SS' format.
+    Converts a date string from 'dd-mm-yyyy' to start and end of the day in 'YYYY-MM-DD HH:MM:SS'.
 
     Args:
-    - date_str (str): Date in 'dd-mm-yyyy' format.
+        - date_str (str): Date in 'dd-mm-yyyy' format.
 
-    Return:
-    - (start_of_day, end_of_day) in 'YYYY-MM-DD HH:MM:SS' format.
+    Returns:
+        - (str, str): Start and end of the day in 'YYYY-MM-DD HH:MM:SS' format, or (None, None) if invalid.
     """
 
     try:

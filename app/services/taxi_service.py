@@ -6,15 +6,18 @@ from app.models.taxis import Taxis
 
 def fetch_taxis(plate, page, limit):
     """
-    Get a list of taxis from the database, with optional filtering and pagination.
+    Fetch taxis with optional filtering and pagination.
 
     Args:
-        plate (str, optional): Filter to return only taxis with the specified license plate.
-        page (int, optional): Page number for pagination. Must be greater than 0.
-        limit (int, optional): Number of records per page for pagination. Must be greater than 0.
+        plate (str): Optional filter by license plate.
+        page (int): Page number (must be > 0).
+        limit (int): Number of records per page (must be > 0).
 
     Return:
-        JSON: A list of taxis or an error message if an error occurs.
+        list: (list of taxis or error message, HTTP status code)
+            - 200: OK
+            - 404: Not Found
+            - 500: Internal Server Error
     """
     session = get_session()
     validation_session(session)
@@ -24,7 +27,7 @@ def fetch_taxis(plate, page, limit):
         query = session.query(Taxis)
 
         if plate:
-            query = query.filter(Taxis.plate == plate)
+            query = query.filter(Taxis.plate.ilike(f"%{plate}%"))
 
         if page and limit:
             # Calcula el número de resultados a omitir
@@ -39,14 +42,8 @@ def fetch_taxis(plate, page, limit):
         if not taxi_results:
             return ({"error": "No taxis found."}), 404
 
-        taxi_list = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
+        response = [{"id": taxi.id, "plate": taxi.plate} for taxi in taxi_results]
 
-        response = {
-            "page": page,
-            "limit": limit,
-            "total_results": len(taxi_list),
-            "taxis": taxi_list,
-        }
         return response, 200
 
     except Exception as e:

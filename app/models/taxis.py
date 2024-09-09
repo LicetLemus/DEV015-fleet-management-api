@@ -10,14 +10,11 @@ class Taxis(Base):
 
     Attributes:
     - id (int): Primary key of the taxi record.
-    - plate (str): License plate number of the taxi.
-    - trajectories (relationship): One-to-many relationship with 'Trajectories'.
+    - plate (str): License plate number.
+    - trajectories (relationship): One-to-many relationship with the 'Trajectories' model.
 
-    Usage:
-    Create a new taxi:
-    ```python
-    new_taxi = Taxis(id=1, plate='ABC123')
-    ```
+    Example:
+        new_taxi = Taxis(id=1, plate='ABC123')
     """
 
     __tablename__ = "taxis"
