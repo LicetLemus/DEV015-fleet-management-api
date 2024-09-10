@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.controllers.create_user_controller import create_user, list_user
+from app.controllers.user_controller import create_user, list_user
 
 bp_create_user = Blueprint("user", __name__)
 

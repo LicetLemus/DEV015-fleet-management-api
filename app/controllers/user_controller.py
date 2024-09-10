@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from app.services.create_user_service import insert_user, get_user
+from app.services.user_service import insert_user, get_user
 
 
 def create_user():

@@ -6,7 +6,7 @@ from app.routes.main import bp_main
 from app.routes.taxi_routes import bp_taxis
 from app.routes.trajectory_routes import bp_location
 from app.routes.trajectory_latest_routes import bp_latest
-from app.routes.create_user import bp_create_user
+from app.routes.user_routes import bp_create_user
 
 from app.models.users import Users
 from app.database.db_sql import create_tables  # Importar la función para crear tablas
