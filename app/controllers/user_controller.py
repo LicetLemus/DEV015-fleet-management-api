@@ -3,6 +3,7 @@ from app.services.user_service import (
     insert_user_to_db,
     fetch_users_from_db,
     update_user_in_db,
+    remove_user_from_db
 )
 
 
@@ -65,5 +66,18 @@ def process_user_update(uid):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+    else:
+        return jsonify({"error": "uid is required"}), 400
+
+
+def delete_user(uid):
+
+    if uid:
+        try:
+            response, status_code = remove_user_from_db(uid)
+            return jsonify(response), status_code
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
     else:
         return jsonify({"error": "uid is required"}), 400

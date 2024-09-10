@@ -95,3 +95,28 @@ def update_user_in_db(uid, name, email, password):
     finally:
         session.close()
         print("Session closed")
+
+
+def remove_user_from_db(uid):
+    session = get_session()
+    validation_session(session)
+
+    try:
+        user = session.query(Users).filter(Users.id == uid).first()
+
+        if not user:
+            return {"error": "User not found"}, 404
+
+        session.delete(user)
+        session.commit()
+        
+        response = {"id": user.id, "name": user.name, "email": user.email}
+
+        return response, 200
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+    finally:
+        session.close()
+        print("Session closed")
