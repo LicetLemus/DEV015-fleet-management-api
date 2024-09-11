@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from app.services.user_service import (
-    insert_user_to_db,
+    create_user_in_db,
     fetch_users_from_db,
     update_user_in_db,
     remove_user_from_db
@@ -18,7 +18,7 @@ def create_user():
         return jsonify({"error": "Name, email, and password are required"}), 400
 
     try:
-        user, status_code = insert_user_to_db(name, email, password)
+        user, status_code = create_user_in_db(name, email, password)
 
         return jsonify(user), status_code
 
@@ -26,7 +26,7 @@ def create_user():
         return jsonify({"Error": str(e)}), 500
 
 
-def list_user():
+def list_all_users():
     page_str = request.args.get("page", default=1)
     limit_str = request.args.get("limit", default=10)
 
@@ -48,7 +48,7 @@ def list_user():
         return jsonify({"error": str(e)}), 500
 
 
-def process_user_update(uid):
+def update_user(uid):
     data = request.get_json()
 
     if not data:

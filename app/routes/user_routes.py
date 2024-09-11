@@ -1,20 +1,20 @@
 from flask import Blueprint, request
-from app.controllers.user_controller import create_user, list_user, process_user_update, delete_user
+from app.controllers.user_controller import create_user, list_all_users, update_user, delete_user
 
 bp_user = Blueprint("user", __name__)
 
 
 @bp_user.route("/users", methods=["GET","POST"])
-def handle_create_list_user():
+def create_or_list_users():
     if request.method == "POST":
         return create_user()
     if request.method == "GET":
-        return list_user()
+        return list_all_users()
     
 
 @bp_user.route("/users/<uid>", methods=["PATCH", "DELETE"])
-def handle_update_user(uid): 
+def update_or_delete_user(uid): 
     if request.method == "PATCH":
-        return process_user_update(uid)
+        return update_user(uid)
     if request.method == "DELETE":
         return delete_user(uid)

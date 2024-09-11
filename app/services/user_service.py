@@ -4,7 +4,7 @@ from app.models.users import Users
 
 
 
-def insert_user_to_db(name, email, password):
+def create_user_in_db(name, email, password):
 
     try:
         existing_user = db.session.query(Users).filter_by(email=email).first()
