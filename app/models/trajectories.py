@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, TIMESTAMP, Double, ForeignKey
-from app.models import Base
-from sqlalchemy.orm import DeclarativeBase, relationship
+from app.database.db_sql import db
+from sqlalchemy.orm import relationship
 
 
-class Trajectories(Base):
+class Trajectories(db.Model):
     """
     SQLAlchemy ORM model for the 'trajectories' table.
 

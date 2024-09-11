@@ -1,6 +1,5 @@
-from app.database.db_sql import get_session
+from app.database.db_sql import db
 from app.models.trajectories import Trajectories
-from app.utils.validation_session import validation_session
 
 
 def fetch_trajectories(taxi_id, date_initial, date_end):
@@ -20,12 +19,10 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
     """
 
     print("------------------------------- fetch_trajectories")
-    session = get_session()
-    validation_session(session)
 
     try:
         # Initialize the query
-        query = session.query(Trajectories)
+        query = db.session.query(Trajectories)
 
         if taxi_id and date_initial and date_end:
             query = query.filter(
@@ -62,7 +59,7 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
     except Exception as e:
         print(f"Error: {e}")
         return {"error": str(e)}, 500
-
+    
     finally:
-        session.close()
+        db.session.close()
         print("Session closed")
