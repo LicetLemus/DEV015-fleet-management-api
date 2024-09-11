@@ -1,16 +1,15 @@
-from sqlalchemy.orm import relationship
-from app.models import Base
+from app.database.db_sql import db  # Importa el objeto db configurado en __init__.py
 from sqlalchemy import Column, Integer, VARCHAR
-from app.models import trajectories
+from sqlalchemy.orm import relationship
 
 
-class Taxis(Base):
+class Taxis(db.Model):
     """
     SQLAlchemy ORM model for the 'taxis' table.
 
     Attributes:
     - id (int): Primary key of the taxi record.
-    - plate (str): License plate number.
+    - plate (str): License plate number of the taxi.
     - trajectories (relationship): One-to-many relationship with the 'Trajectories' model.
 
     Example:
