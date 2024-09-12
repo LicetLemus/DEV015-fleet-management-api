@@ -1,5 +1,7 @@
 from flask import Flask
 from app.database.db_sql import db
+from app.config import Config
+
 from app.routes.main import bp_main
 from app.routes.taxi_routes import bp_taxis
 from app.routes.trajectory_routes import bp_location
@@ -9,7 +11,7 @@ from app.routes.user_routes import bp_user
 from app.models.users import Users
 
 
-def create_app():
+def create_app(config_class = Config):
     """
     Creates and configures an instance of the Flask application.
     This function initializes the Flask application, loads configuration settings, and registers blueprints to organize the routes of the application.
@@ -20,9 +22,7 @@ def create_app():
 
     app = Flask(__name__)  # create of  instance of the Flask class
     # configuration
-    app.config.from_object(
-        "app.config.Config"
-    )  # load the configuration from the config.py file
+    app.config.from_object(config_class)
 
     # Inicializar sqlalchemy con la aplicaion
     db.init_app(app)
