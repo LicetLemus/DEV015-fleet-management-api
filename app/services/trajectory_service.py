@@ -35,23 +35,23 @@ def fetch_trajectories(taxi_id, date_initial, date_end):
 
         # Execute the query and fetch results
         trajectories_results = query.all()
-        print("resultado---------------", trajectories_results)
+        print("result---------------", trajectories_results)
 
         # Build the response
         if not trajectories_results:
-            print("entrada if-------------")
+            print("Entrance if-------------")
             return {"error": "No trajectories found."}, 404
 
         # Prepare to response the results
         response = [
             {
-                "id": trajectorie.id,
-                "taxiId": trajectorie.taxi_id,
-                "date": trajectorie.date,
-                "latitude": trajectorie.latitude,
-                "longitude": trajectorie.longitude,
+                "id": trajectory.id,
+                "taxiId": trajectory.taxi_id,
+                "date": trajectory.date,
+                "latitude": trajectory.latitude,
+                "longitude": trajectory.longitude,
             }
-            for trajectorie in trajectories_results
+            for trajectory in trajectories_results
         ]
 
         return response, 200

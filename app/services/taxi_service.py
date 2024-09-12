@@ -27,9 +27,9 @@ def fetch_taxis(plate, page, limit):
             query = query.filter(Taxis.plate.ilike(f"%{plate}%"))
 
         if page and limit:
-            # Calcula el número de resultados a omitir
+            # calculate the number of results to skip
             offset = (page - 1) * limit
-            # Si se aplica paginación
+            # if pagination is applied
             query = query.offset(offset).limit(limit)
 
         # Execute the query and fetch results

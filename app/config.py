@@ -8,3 +8,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False # Desactiva las notificaciones de modificaciones
 
+
+class TestingConfig(Config):
+    Testing = True
+    SQLALCHEMY_DATABASE_URI = os.getenv("TEST_DATABASE_URL")

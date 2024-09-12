@@ -52,7 +52,7 @@ def update_user(uid):
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No data provided"}), 400  # Manejo de caso sin datos
+        return jsonify({"error": "No data provided"}), 400 
 
     name = data.get("name")
     email = data.get("email")
