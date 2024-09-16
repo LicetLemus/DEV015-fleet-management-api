@@ -1,12 +1,14 @@
 from flask import Flask
 from app.database.db_sql import db
 from app.config import Config
+from flask_jwt_extended import JWTManager
 
 from app.routes.main import bp_main
 from app.routes.taxi_routes import bp_taxis
 from app.routes.trajectory_routes import bp_location
 from app.routes.trajectory_latest_routes import bp_latest
 from app.routes.user_routes import bp_user
+from app.routes.auth import bp_auth
 
 from app.models.users import Users
 
@@ -26,6 +28,7 @@ def create_app(config_class = Config):
 
     # Inicializar sqlalchemy con la aplicaion
     db.init_app(app)
+    jwt = JWTManager(app)
 
     # Import and register the blueprint: Blueprint is a way to organize the routes of the application.
     app.register_blueprint(bp_main)
@@ -33,6 +36,7 @@ def create_app(config_class = Config):
     app.register_blueprint(bp_location)
     app.register_blueprint(bp_latest)
     app.register_blueprint(bp_user)
+    app.register_blueprint(bp_auth)
 
     try:
         with app.app_context():

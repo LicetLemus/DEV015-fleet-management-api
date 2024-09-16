@@ -1,7 +1,7 @@
 from flask import jsonify
 from app.database.db_sql import db
 from app.models.users import Users
-
+from werkzeug.security import generate_password_hash
 
 
 def create_user_in_db(name, email, password):
@@ -11,7 +11,8 @@ def create_user_in_db(name, email, password):
         if existing_user:
             return {"error": "The user already exists"}, 409
 
-        new_user = Users(name=name, email=email, password=password)
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256') 
+        new_user = Users(name=name, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
 
