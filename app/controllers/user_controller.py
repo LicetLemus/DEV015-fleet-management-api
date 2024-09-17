@@ -27,8 +27,8 @@ def create_user():
 
 
 def list_all_users():
-    page_str = request.args.get("page", default=1)
-    limit_str = request.args.get("limit", default=10)
+    page_str = request.args.get("page", default="1")
+    limit_str = request.args.get("limit", default="10")
 
     try:
         page = int(page_str)
