@@ -6,6 +6,7 @@ bp_user = Blueprint("user", __name__)
 
 
 @bp_user.route("/users", methods=["POST"])
+@jwt_required()
 def create_user_route():
     return create_user()
 
