@@ -12,6 +12,7 @@ class Config:
 
 
 class TestingConfig(Config):
-    Testing = True
+    TESTING = True
     SQLALCHEMY_DATABASE_URI = os.getenv("TEST_DATABASE_URL")
-    ACCESS_TOKEN = os.getenv("TEST_ACCESS_TOKEN")
+    SECRET_KEY = os.getenv("TEST_SECRET_KEY")
+    # ACCESS_TOKEN = os.getenv("TEST_ACCESS_TOKEN")
