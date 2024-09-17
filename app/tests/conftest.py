@@ -8,6 +8,7 @@ from app.models.trajectories import Trajectories
 
 load_dotenv()
 
+accessToken = TestingConfig.ACCESS_TOKEN
 
 @pytest.fixture(scope="module")
 def test_client():
@@ -16,7 +17,7 @@ def test_client():
 
     # start the app context for initial setup
     with app.app_context():
-        # db.drop_all()
+        db.drop_all()
         # create the tables in the database for testing
         db.create_all()
         
@@ -31,6 +32,10 @@ def test_client():
 
     # create a test client to simulate HTTP requests
     with app.test_client() as testing_client:
+        
+        # Set the authorization header with the test token
+        testing_client.environ_base['HTTP_AUTHORIZATION'] = f'Bearer {accessToken}'
+        
         # yield the test client for use in tests
         yield testing_client
 

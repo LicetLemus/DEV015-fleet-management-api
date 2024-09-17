@@ -20,7 +20,7 @@ def authentic_user(email, password_data):
         ## Generate access token
         access_token = create_access_token(
             identity=user.email,
-            expires_delta=datetime.timedelta(seconds=30)  # Token expires in 1 hour
+            expires_delta=datetime.timedelta(hours=1)  # Token expires in 1 hour
             )
 
         return (
