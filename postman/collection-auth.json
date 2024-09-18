@@ -113,8 +113,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"/login endpoint responds with 404 if credentials do not match\", () => {",
-									"    pm.expect(pm.response.code).to.eq(404);",
+									"pm.test(\"/login endpoint responds with 401 if credentials do not match\", () => {",
+									"    pm.expect(pm.response.code).to.eq(401);",
 									"});",
 									""
 								],
