@@ -1,8 +1,8 @@
-from app.database.db_sql import get_session
+from app.database.db_sql import db
 from sqlalchemy import func
 from app.models.trajectories import Trajectories
 from app.models.taxis import Taxis
-from app.utils.validation_session import validation_session
+
 
 
 def fetch_trajectory_latest():
@@ -15,13 +15,11 @@ def fetch_trajectory_latest():
             - 404: No trajectories found
             - 500: Internal server error if an exception occurs
     """
-    session = get_session()
-    validation_session(session)
 
     try:
         # Initialize the subquery to find the latest date for each taxi
         subquery = (
-            session.query(
+            db.session.query(
                 Trajectories.taxi_id, func.max(Trajectories.date).label("latest_date")
             )
             .group_by(Trajectories.taxi_id)
@@ -29,7 +27,7 @@ def fetch_trajectory_latest():
         )
 
         query = (
-            session.query(
+            db.session.query(
                 Taxis.id,
                 Trajectories.latitude,
                 Trajectories.longitude,
@@ -76,7 +74,7 @@ def fetch_trajectory_latest():
     except Exception as e:
         print(f"Error: {e}")
         return {"error": str(e)}, 500
-
+    
     finally:
-        session.close()
+        db.session.close()
         print("Session closed")

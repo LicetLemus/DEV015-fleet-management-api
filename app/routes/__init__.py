@@ -1,4 +1,4 @@
-# Capa de Presentación (API Routes)
-# Archivo: routes/taxis.py
-# Define las rutas de la API y gestiona las solicitudes y respuestas de los clientes.
-# Utiliza Blueprint para modularizar las rutas.
+# Presentation Layer (API Routes)
+# File: routes/taxis.py
+# Defines the API routes and manages client requests and responses.
+# Uses Blueprint to modularize the routes.

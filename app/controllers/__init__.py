@@ -1,3 +1,3 @@
-# Capa de Controladores (Business Logic)
-# Archivo: controllers/taxis_controller.py
-# Maneja la lógica de negocio y orquesta la interacción entre la capa de presentación y la capa de servicios.
+# Controller Layer
+# File: controllers/taxis_controller.py
+# act as intermediaries that manage user inputs and outputs, invoking business logic as needed.

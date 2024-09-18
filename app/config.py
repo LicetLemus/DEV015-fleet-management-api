@@ -1,5 +1,3 @@
-# define the configuration of the app, including the database URL
-
 from dotenv import load_dotenv
 import os  # for os.environ is used to access the environment variables
 
@@ -7,7 +5,14 @@ load_dotenv()
 
 
 class Config:
-    database_url = os.getenv("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False # Desactiva las notificaciones de modificaciones
+    DEBUG = True
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 
-# use the database_url variable to connect to the database not the DATABASE_URL variable with the value
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.getenv("TEST_DATABASE_URL")
+    SECRET_KEY = os.getenv("TEST_SECRET_KEY")
+    # ACCESS_TOKEN = os.getenv("TEST_ACCESS_TOKEN")
