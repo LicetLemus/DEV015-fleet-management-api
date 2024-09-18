@@ -16,7 +16,7 @@ def get_test_token():
     app = create_app(TestingConfig)
     with app.app_context():
         # Create a test token
-        return create_access_token(identity='HOLA')
+        return create_access_token(identity='test@gmail.com')
 
 
 @pytest.fixture(scope="module")
