@@ -27,7 +27,7 @@ Esta API REST permite gestionar los datos de una flota de taxis, proporcionando 
 A continuación se describen los principales endpoints disponibles:
 
 - **GET /taxis**: Obtiene el listado de taxis. Soporta los parámetros `plate`, `page` y `limit`. Ejemplo: `/taxis?limit=3&page=2`
-- **GET /trajectories**: Obtiene el listado de trayectorias, teniendo en cuenta el parámetro `taxiId` y `date`. Ejemplo: `/trajectories?taxiId=6418&date=02-02-2008
+- **GET /trajectories**: Obtiene el listado de trayectorias, teniendo en cuenta el parámetro `taxiId` y `date`. Ejemplo: `/trajectories?taxiId=6418&date=02-02-2008`
 - **GET /trajectories/latest**: Obtiene la última trayectoria de cada taxi. Ejemplo: `trajectories/latest`
 - **POST /users**: Crea nuevos usuarios
 `{
