@@ -15,4 +15,4 @@ if __name__ == '__main__':
     information for development purposes.
     """
     
-    app.run(debug=True, host='0.0.0.0', port=8000) # run the application
+    app.run() # run the application
